@@ -18,5 +18,4 @@ debug.level = namespace.level = function(newLevel) {
   level = newLevel;
 };
 
-
 export default namespace;

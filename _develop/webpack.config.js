@@ -8,7 +8,7 @@ var bannerPack = new webpack.BannerPlugin({
     'Quill Editor v' + pkg.version + '\n' +
     'https://quilljs.com/\n' +
     'Copyright (c) 2014, Jason Chen\n' +
-    'Copyright (c) 2013, salesforce.com',
+    'Copyright (c) 2013, salesforce.com\n',
   entryOnly: true
 });
 var constantPack = new webpack.DefinePlugin({
