@@ -71,10 +71,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "license": "BSD-3-Clause",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/quilljs/quill"
-  },
+  "repository": "https://github.com/quilljs/quill",
   "bugs": {
     "url": "https://github.com/quilljs/quill/issues"
   },

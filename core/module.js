@@ -1,10 +1,11 @@
+
 class Module {
   constructor(quill, options = {}) {
     this.quill = quill;
     this.options = options;
   }
 }
-Module.DEFAULTS = {};
 
+Module.DEFAULTS = {};
 
 export default Module;

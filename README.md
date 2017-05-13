@@ -1,3 +1,5 @@
+#Hyeongjin@innerwave.co.kr
+
 # [Quill Rich Text Editor](http://quilljs.com/) [![Build Status](https://travis-ci.org/quilljs/quill.svg?branch=master)](http://travis-ci.org/quilljs/quill)
 
 [![Test Status](https://cdn.quilljs.com/badge.svg?v=2)](https://saucelabs.com/u/quill)
