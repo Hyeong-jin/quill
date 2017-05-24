@@ -72,7 +72,7 @@ var quill = new Quill('#editor');
 
 quill.insertText(0, 'Test', { bold: true });
 quill.formatText(0, 4, 'italic', true);
-// If we named our italic blot "myitalic", we would call
+// 이탤릭 blot을 'myitalic"이라 이름지었으면, 다음처럼 사용합니다
 // quill.formatText(0, 4, 'myitalic', true);
 ```
 
