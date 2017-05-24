@@ -16,26 +16,24 @@ redirect_from:
 
 일관된 편집 환경을 제공하려면 데이터와 예측 가능한 비헤이비어가 일관성이 있어야합니다. DOM은 유감스럽게도 양질의 데이터 저장소가되기 위해 이 두 가지가 부족합니다. 현대 편집자를위한 솔루션은 내용을 표현하기 위해 자체 문서 모델을 유지하는 것입니다. [Parchment](https://github.com/quilljs/parchment/)는 Quill을위한 솔루션입니다. 고유 한 API 레이어를 사용하여 자체 코드베이스로 구성됩니다. Parchment를 통해 Quill이 인식하는 컨텐트 및 형식을 사용자 정의하거나 완전히 새로운 형식을 추가 할 수 있습니다.
 
-In this guide, we will use the building blocks provided by Parchment and Quill to replicate the editor on Medium. We will to start with the bare bones of Quill, without any themes, extraneous modules, or formats. At this basic level, Quill only understand plain text. But by the end of this guide, links, videos, and even Tweets will be understood.
-
 이 가이드에서는 Parchment와 Quill이 제공 한 빌딩 블록을 사용하여 Medium의 편집기를 복제합니다. 우리는 Quill의 뼈로 시작하여, 테마 나 관계없는 모듈 또는 형식없이 시작합니다. 이 기본 수준에서 Quill은 일반 텍스트 만 이해합니다. 그러나이 가이드의 끝 부분에서 링크, 비디오 및 Tweet을 이해하게 됩니다.
 
 ### Groundwork
 
-Quill을 사용하지 않고 그냥 텍스트 영역과 버튼으로 시작하여 가짜 이벤트 리스너에 연결하자. 우리는이 가이드 전체에서 편의상 jQuery를 사용 하겠지만 Quill이나 Parchment는 이것에 의존하지 않습니다. 또한 [Google Fonts](https://fonts.google.com/)와 [Font Awesome](http://fontawesome.io/)의 도움으로 기본 스타일을 추가 할 것입니다. 이 중 아무 것도 Quill이나 Parchment와 관련이 없으므로 신속하게 처리해 드리겠습니다.
+Quill을 사용하지 않고 그냥 텍스트 영역과 버튼으로 시작하여 가짜 이벤트 리스너에 연결하자. 우리는이 가이드 전체에서 편의상 jQuery를 사용 하겠지만 Quill이나 Parchment는 이것에 의존하지 않습니다. 또한 [Google Fonts](https://fonts.google.com/)와 [Font Awesome](http://fontawesome.io/)의 도움으로 기본 스타일을 추가 할 것입니다. 이 중 아무 것도 Quill이나 Parchment와 관련이 없으므로 신속하게 처리하겠습니다.
 
 <div data-height="400" data-theme-id="23269" data-slug-hash="oLVAKZ" data-default-tab="result" data-embed-version="2" class="codepen"></div>
 
 
 ### Adding Quill Core
 
-다음으로 우리는 테마 영역이 없는 퀼 코어, 형식 및 관계없는 모듈로 텍스트 영역을 대체 할 것입니다. 에디터에 입력하는 동안 개발자 콘솔을 열어 데모를 확인하십시오. 동작하는 Parchment 문서의 기본 빌딩 블록을 볼 수 있습니다.
+다음으로 우리는 테마 영역이 없는 Quill 코어, 형식 및 관계없는 모듈로 텍스트 영역을 대체 할 것입니다. 에디터에 입력하는 동안 개발자 콘솔을 열어 데모를 확인하십시오. 동작하는 Parchment 문서의 기본 빌딩 블록을 볼 수 있습니다.
 
 <div data-height="400" data-theme-id="23269" data-slug-hash="QEoZQb" data-default-tab="result" data-embed-version="2" class="codepen"></div>
 
-DOM과 마찬가지로 Parchment 문서도 트리구조입니다. Blots라고하는 노드는 DOM 노드에 대한 추상화입니다. 스크롤, 블록, 인라인, 텍스트 및 나누기 등 몇 가지 Blot이 이미 정의되어 있습니다. 입력 할 때 Text Blot은 해당 DOM Text 노드와 동기화됩니다. 입력은 새로운 Block blot을 생성하여 처리됩니다. Parchment에서는 Blot은 자식을 가질 수 있어야하므로 빈 블럭은 브레이크 Blot으로 채워집니다. 따라서 Leaf를 간단하고 예측 가능하게 처리 할 수 있습니다. 이 모든 것은 루트 Scroll blot 아래에 구성됩니다.
+DOM과 마찬가지로 Parchment 문서도 트리구조입니다. Blot라고 하는 노드는 DOM 노드에 대한 추상화입니다. 스크롤, 블록, 인라인, 텍스트 및 나누기 등 몇 가지 Blot이 이미 정의되어 있습니다. 입력 할 때 Text Blot은 해당 DOM Text 노드와 동기화됩니다. 입력은 새로운 Block blot을 생성하여 처리됩니다. Parchment에서는 Blot은 자식을 가질 수 있어야 하므로 빈 블럭은 브레이크 Blot으로 채워집니다. 따라서 Leaf를 간단하고 예측 가능하게 처리 할 수 있습니다. 이 모든 것은 루트 Scroll blot 아래에 구성됩니다.
 
-의미있는 구조 나 서식을 문서에 제공하지 않으므로이 시점에서 입력하면 인라인 블롯을 볼 수 없습니다. 유효한 퀼 문서는 정규적이고 컴팩트해야합니다. 주어진 문서를 나타낼 수있는 유효한 DOM 트리가 하나 뿐이며 DOM 트리에는 최소한의 노드가 포함됩니다.
+의미있는 구조나 서식을 문서에 제공하지 않으므로이 시점에서 입력하면 인라인 Blot을 볼 수 없습니다. 유효한 Quill 문서는 정규적이고 컴팩트해야합니다. 주어진 문서를 나타낼 수있는 유효한 DOM 트리가 하나 뿐이며 DOM 트리에는 최소한의 노드가 포함됩니다.
 
 `<p><span>Text</span></p>`와 `<p>Text</p>`는 동일한 내용을 표현하기 때문에 전자는 무효이며 `<span>`을 풀기위한 Quill의 최적화 과정의 일부입니다. 마찬가지로 형식을 추가하면 `<p><em>Te</em><em>st</em></p>`와 `<p><em><em>Test</em></em></p>`도 가장 컴팩트 한 표현이 아니므로 유효하지 않습니다.
 
@@ -47,7 +45,7 @@ DOM과 마찬가지로 Parchment 문서도 트리구조입니다. Blots라고하
 
 앞에서 Inline은 서식을 지정하지 않는다고 언급했습니다. 이는 기본 인라인 클래스에 대해 작성된 규칙이 아니라 예외입니다. 기본 블록 Blot는 블록 레벨 요소에 대해 동일한 방식으로 작동합니다.
 
-굵은 글씨체와 이탤릭체를 구현하려면 인라인에서 상속 받아`blotName`과`tagName`을 설정하고 Quill로 등록하면됩니다. 상속 된 정적 메서드 및 변수의 서명에 대한 전체 참조는 [Parchment](https://github.com/quilljs/parchment/)를 참조하십시오.
+굵은 글씨체와 이탤릭체를 구현하려면 인라인에서 상속 받아 `blotName`과 `tagName`을 설정하고 Quill로 등록하면됩니다. 상속 된 정적 메서드 및 변수의 서명에 대한 전체 참조는 [Parchment](https://github.com/quilljs/parchment/)를 참조하십시오.
 
 ```js
 let Inline = Quill.import('blots/inline');
@@ -64,7 +62,7 @@ Quill.register(BoldBlot);
 Quill.register(ItalicBlot);
 ```
 
-우리는 여기서`strong`와`em` 태그를 사용할 때 Medium의 예제를 따르지만`b`와`i` 태그를 사용할 수도 있습니다. Blot의 이름은 Quill에 의해 형식의 이름으로 사용됩니다. 블롯을 등록하면 Quill의 전체 API를 새로운 형식으로 사용할 수 있습니다.
+우리는 여기서`strong`와`em` 태그를 사용할 때 Medium의 예제를 따르지만`b`와`i` 태그를 사용할 수도 있습니다. Blot의 이름은 Quill에 의해 형식의 이름으로 사용됩니다. Blot을 등록하면 Quill의 전체 API를 새로운 형식으로 사용할 수 있습니다.
 
 ```js
 Quill.register(BoldBlot);
@@ -88,7 +86,7 @@ quill.formatText(0, 4, 'italic', true);
 
 ### Links
 
-링크는 링크 URL을 저장하기 위해 부울 이상이 필요하기 때문에 약간 더 복잡합니다. 이것은 두 가지 방법으로 링크 블롯에 영향을줍니다: 생성 및 포맷 검색. url을 문자열 값으로 나타내지만 url 키가있는 객체와 같은 다른 방법으로 쉽게 할 수 있습니다. 다른 키/값 쌍을 설정하고 링크를 정의 할 수 있습니다. 나중에 [images](#images)로 이를 보여줍니다.
+링크는 링크 URL을 저장하기 위해 부울 이상이 필요하기 때문에 약간 더 복잡합니다. 이것은 두 가지 방법으로 링크 Blot에 영향을줍니다: 생성 및 포맷 검색. url을 문자열 값으로 나타내지만 url 키가있는 객체와 같은 다른 방법으로 쉽게 할 수 있습니다. 다른 키/값 쌍을 설정하고 링크를 정의 할 수 있습니다. 나중에 [images](#images)로 이를 보여줍니다.
 
 ```js
 class LinkBlot extends Inline {
@@ -147,7 +145,7 @@ HeaderBlot.blotName = 'header';
 HeaderBlot.tagName = ['H1', 'H2'];
 ```
 
-이 새로운 블롯을 각각의 버튼에 연결하고 `<blockquote>` 태그를 위한 CSS를 추가합시다.
+이 새로운 Blot을 각각의 버튼에 연결하고 `<blockquote>` 태그를 위한 CSS를 추가합시다.
 
 <div data-height="400" data-theme-id="23269" data-slug-hash="NAmKAR" data-default-tab="result" data-embed-version="2" class="codepen"></div>
 
@@ -155,9 +153,9 @@ HeaderBlot.tagName = ['H1', 'H2'];
 
 ### Dividers
 
-이제 첫 번째 Blot을 구현해 보겠습니다. 이전의 Blot 예제가 포맷팅에 기여하고 `format ()`을 구현하는 동안, 잎 블롯은 내용을 제공하고 `value ()`를 구현합니다. 리프 블롯은 Text 또는 Embed Blots 일 수 있으므로 섹션 구분선은 Embed입니다. 일단 생성되면 Embed Blots의 값은 변경되지 않으며 해당 위치의 내용을 변경하기 위해 삭제 및 재 삽입이 필요합니다.
+이제 첫 번째 Blot을 구현해 보겠습니다. 이전의 Blot 예제가 포맷팅에 기여하고 `format ()`을 구현하는 동안, 잎 Blot은 내용을 제공하고 `value ()`를 구현합니다. 리프 Blot은 Text 또는 Embed Blots 일 수 있으므로 섹션 구분선은 Embed입니다. 일단 생성되면 Embed Blots의 값은 변경되지 않으며 해당 위치의 내용을 변경하기 위해 삭제 및 재 삽입이 필요합니다.
 
-우리의 방법론은 BlockEmbed에서 상속받는 것을 제외하고는 이전과 유사합니다. Embed는 `blots/embed`에도 존재하지만 인라인 레벨 블롯을 위한 것입니다. 우리는 디바이더 대신 블럭 레벨 구현을 원합니다.
+우리의 방법론은 BlockEmbed에서 상속받는 것을 제외하고는 이전과 유사합니다. Embed는 `blots/embed`에도 존재하지만 인라인 레벨 Blot을 위한 것입니다. 우리는 디바이더 대신 블럭 레벨 구현을 원합니다.
 
 ```js
 let BlockEmbed = Quill.import('blots/block/embed');
@@ -174,7 +172,7 @@ DividerBlot.tagName = 'hr';
 
 ### Images
 
-이미지는 우리가 [Link](#links)와 [Divider](#divider) 블롯을 만드는 것을 배운 것과 함께 추가 될 수 있습니다. 값에 대해 객체를 사용하여 이것이 어떻게 지원되는지 보여줍니다. 이미지를 삽입하는 버튼 핸들러는 정적 값을 사용할 것이므로이 가이드의 초점 인 [Parchment](https://github.com/quilljs/parchment/)와는 무관하게 툴팁 UI 코드에 주의를 기울이지 않아도됩니다.
+이미지는 우리가 [Link](#links)와 [Divider](#divider) Blot을 만드는 것을 배운 것과 함께 추가 될 수 있습니다. 값에 대해 객체를 사용하여 이것이 어떻게 지원되는지 보여줍니다. 이미지를 삽입하는 버튼 핸들러는 정적 값을 사용할 것이므로이 가이드의 초점 인 [Parchment](https://github.com/quilljs/parchment/)와는 무관하게 툴팁 UI 코드에 주의를 기울이지 않아도됩니다.
 
 ```js
 let BlockEmbed = Quill.import('blots/block/embed');
@@ -277,7 +275,7 @@ VideoBlot.tagName = 'iframe';
 
 Medium는 다양한 유형의 삽입을 지원하지만 이 가이드에서는 Tweet에만 초점을 맞춥니다. Tweet Blot은 거의 [images](#images)와 거의 동일하게 구현됩니다. Embed Blots가 무효 노드에 해당 할 필요가 없다는 사실을 이용합니다. 그것은 임의의 노드가 될 수 있고 Quill은 그것을 무효 노드처럼 취급 할 것이고 자식이나 자손을 방해하지 않을 것입니다. 이렇게하면 `<div>`와 네이티브 Twitter Javascript 라이브러리를 사용하여 우리가 지정하는 `<div>` 컨테이너 내에서 만족스러운 것을 할 수 있습니다.
 
-루트 Scroll Blot 또한 `<div>`을 사용하기 때문에 명확성을 위해 `className`도 지정합니다. 참고적으로 인라인 블롯은 `<span>`을 사용하고 블럭 블롯은 기본적으로 `<p>`를 사용합니다. 따라서 사용자 정의 블롯에 이 태그를 사용하려면 `tagName`에 추가적인 `className`을 지정해야합니다.
+루트 Scroll Blot 또한 `<div>`을 사용하기 때문에 명확성을 위해 `className`도 지정합니다. 참고적으로 인라인 Blot은 `<span>`을 사용하고 블럭 Blot은 기본적으로 `<p>`를 사용합니다. 따라서 사용자 정의 Blot에 이 태그를 사용하려면 `tagName`에 추가적인 `className`을 지정해야합니다.
 
 우리는 Blot을 정의하는 값으로 Tweet ID를 사용합니다. 다시 말해서 클릭 핸들러는 정적인 값을 사용하여 관련성없는 UI 코드에서 주의를 산만하게하지 않습니다.
 
@@ -286,7 +284,7 @@ class TweetBlot extends BlockEmbed {
   static create(id) {
     let node = super.create();
     node.dataset.id = id;
-    // Allow twitter library to modify our contents
+    // 트위터 라이브러리가 컨텐츠를 수정하도록 허용
     twttr.widgets.createTweet(id, node);
     return node;
   }
